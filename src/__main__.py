@@ -48,9 +48,11 @@ class Board:
                 board_row = self.board[new_board_row_id]
                 new.append([])
                 print('board_row', board_row, 'piece_row', piece_row)
+
+                new_board_col_from = min(len(self.board[new_board_row_id]) - len(piece_row), from_col)
                 if from_col:
-                    new[new_board_row_id] += board_row[:from_col]
-                for col, combined in enumerate(itertools.zip_longest(board_row[max(from_col-1, 0):],
+                    new[new_board_row_id] += board_row[:new_board_col_from]
+                for col, combined in enumerate(itertools.zip_longest(board_row[new_board_col_from:],
                                                                      piece_row[:],
                                                                      fillvalue=0)):
                     if combined.count(0) < 1:
@@ -75,37 +77,6 @@ class Board:
             return combined[0]
         else:
             return self.placed_piece_cnt + 2
-    # def __fit_form(self, piece, size: int, from_row: int, from_col: int):
-    #
-    #     new = []
-    #     row = 0
-    #     try:
-    #         for board_row, piece_row in zip(self.board[:], piece[:]):
-    #              # from_row, from_col is already provided in outer loop
-    #              # then here we loop again, that is the problem
-    #             new.append([])
-    #             print('board_row', board_row, 'piece_row', piece_row)
-    #             if row < from_row and new[row] != self.board[row]:
-    #                 new[row] += self.board[row]
-    #                 row += 1
-    #                 continue
-    #             for col, combined in enumerate(zip(board_row[:], piece_row)):
-    #                 if col < from_col and new[row] != self.board[row]:
-    #                     new[row] += [board_row[col]]
-    #                     continue
-    #                 if (cell := sum(combined)) > self.placed_piece_cnt + 1:
-    #                     raise StopIteration
-    #                 new[row] += [cell]
-    #                 print(new)
-    #             row += 1
-    #         else:
-    #             if size == sum(map(sum, zip(*new))) - sum(map(sum, zip(*self.board))):  # every cell fits
-    #                 self.board = new[:]
-    #                 self.board_size += size
-    #                 self.placed_piece_cnt += 1
-    #                 return True
-    #     except StopIteration:
-    #         pass
 
     def get_next_empty_cell(self):
         for row_id, row in enumerate(self.board):
