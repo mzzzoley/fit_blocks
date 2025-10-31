@@ -48,14 +48,16 @@ class Board:
                 board_row = self.board[new_board_row_id]
                 new.append([])
                 print('board_row', board_row, 'piece_row', piece_row)
-                for col, combined in enumerate(itertools.zip_longest(board_row[:], piece_row[:], fillvalue=0)):
-                # for col, combined in enumerate(zip(board_row[:], piece_row[:])):
-                    if len(new[new_board_row_id]) > col:
-                        continue
-                    if col < from_col and len(new[new_board_row_id]) == 0:
-                        new[new_board_row_id] += board_row[:from_col]
-                        continue
+                if from_col:
+                    new[new_board_row_id] += board_row[:from_col]
+                for col, combined in enumerate(itertools.zip_longest(board_row[max(from_col-1, 0):],
+                                                                     piece_row[:],
+                                                                     fillvalue=0)):
+                    if combined.count(0) < 1:
+                        raise StopIteration
                     new[new_board_row_id] += [self.addval(combined)]
+                    if len(new[new_board_row_id]) > len(self.board[new_board_row_id]):
+                        raise StopIteration
                     print(new)
             else:
                 self.board = new[:]
@@ -66,11 +68,8 @@ class Board:
         except StopIteration:
             pass
 
-
     def addval(self, combined):
-        if combined.count(0) < 1:
-            raise StopIteration
-        elif sum(combined) == 0:
+        if sum(combined) == 0:
             return 0
         elif combined[0]:
             return combined[0]
