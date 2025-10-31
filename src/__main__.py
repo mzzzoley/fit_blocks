@@ -25,18 +25,20 @@ class Board:
         """
         for from_row, from_col in self.get_next_empty_cell():
             print(from_row, from_col)
-            for form in piece:
-                print('piece', form)
-                if self.__fit_form(form, piece.size, from_row, from_col):
-                    return
+            for shape in piece:
+                print('piece', shape)
+                if self.fit_shape(shape, piece.size, from_row, from_col):
+                    return 1
+        return 0
 
-    def __fit_form(self, piece, size: int, from_row: int, from_col: int):
+    def fit_shape(self, piece, size: int, from_row: int, from_col: int):
 
         new = []
         if 0 < from_row:
             new += self.board[:from_row]
         try:
             for row, piece_row in enumerate(piece):
+                # if piece is smaller than board, 2x2 piece in 1/1 place in 4x4 board, last two rows will be omitted
                 new_board_row_id = from_row + row
                 if sum(piece_row) > 0 and len(self.board) < row + 1:
                         raise StopIteration
@@ -89,42 +91,54 @@ class FitBlocks:
 
     def __init__(self):
         self.board = Board()
-        self.pieces = [Piece(five_gun),
-                       Piece(three_corner),
+        # self.pieces = [Piece(six_lego),
+        #                Piece(five_bag)]
+        # self.pieces = [Piece(five_bag),
+        #                Piece(six_lego)]
+        # self.pieces = [Piece(five_gun),
+        #                Piece(three_corner),
+        #                Piece(three_corner)]
+        self.pieces = [Piece(three_corner),
+                       Piece(five_gun),
                        Piece(three_corner)]
+        self.piece_count = len(self.pieces)
+        self.placed_pieces = []
 
     def solve(self):
-        for piece in self.pieces:
-            self.board.place_piece(piece)
+        repeated = 0
+        while self.pieces:
+            piece = self.pieces.pop()
+            if self.board.place_piece(piece):
+                self.placed_pieces.append(piece)
+                repeated = 0
+            else:
+                self.pieces.insert(0, piece)
+                repeated += 1
+            if repeated == len(self.pieces):
+                if self.placed_pieces:
+                    last_tried = self.placed_pieces.pop()
+                    self.pieces.insert(0, last_tried)
+                break
+
+        if len(self.placed_pieces) != self.piece_count:
+            print("FAIL", "Pieces don't fit", sep='\n')
+        else:
+            print("SUCCESS")
             print(self.board)
+
+    def place_piece(self, piece:Piece):
+        """
+            Fit piece on board
+            Return True if fits
+        """
+        for from_row, from_col in self.board.get_next_empty_cell():
+            print(from_row, from_col)
+            for shape in piece:
+                print('piece', shape)
+                if self.board.fit_shape(shape, piece.size, from_row, from_col):
+                    return True
 
 
 if __name__ == '__main__':
     app = FitBlocks()
     app.solve()
-
-    # piece_four = [[1,1],
-    #               [1,1]]
-    # piece_two = [[0,0],
-    #              [1,1]]
-    #
-    # four = Piece(piece_four)
-    # two = Piece(piece_two)
-    # two_two = Piece(piece_two)
-
-    # pipi = [[1,0,0,0],
-    #         [1,0,0,0],
-    #         [1,1,0,0],
-    #         [1,0,0,0]]
-    #
-    # pi = Piece(pipi)
-    # print(pi)
-
-
-    # board = [[0,0],
-    #          [0,0],
-    #          [1,0]]
-    #
-    # piece = [[1,0],
-    #          [1,0],
-    #          [1,0]]
