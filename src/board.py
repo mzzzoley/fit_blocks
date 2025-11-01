@@ -28,19 +28,6 @@ class Board:
     def get_board_size(self):
         return sum(map(sum, zip(*self.board)))
 
-    def place_piece(self, piece:Piece):
-        """
-            Fit piece on board
-            Return True if fits
-        """
-        for from_row, from_col in self.get_next_empty_cell():
-            print(from_row, from_col)
-            for shape in piece:
-                print('piece', shape)
-                if self.fit_shape(shape, piece.size, from_row, from_col):
-                    return 1
-        return 0
-
     def fit_shape(self, piece, size: int, from_row: int, from_col: int):
 
         new = []
@@ -60,7 +47,6 @@ class Board:
                     if sum(map(sum, zip(*piece[row:]))) == 0 and len(new) == len(self.board):
                         break
                     continue
-                    # continues when every row is already there
                 board_row = self.board[new_board_row_id]
                 new.append([])
                 new_board_col_from = min(len(self.board[new_board_row_id]) - len(piece_row), from_col)
@@ -74,7 +60,7 @@ class Board:
                     new[new_board_row_id] += [self.addval(combined)]
                     if len(new[new_board_row_id]) > len(self.board[new_board_row_id]):
                         raise StopIteration
-            # else:
+
             if (rows_missing := len(self.board) - len(new)) > 0:
                 new += (self.board[-rows_missing:])
             self.board_history.append(self.board[:])

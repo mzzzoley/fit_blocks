@@ -54,7 +54,6 @@ class FitBlocks:
                 repeated = 0
             piece = self.pieces.pop()
             result, placement = self.place_piece(piece)
-            # if (placement := self.place_piece(piece))[0] == 'ok':
             if result == 'ok':
                 self.placed_pieces.append(piece)
                 repeated = 0
@@ -78,14 +77,19 @@ class FitBlocks:
             Fit piece on board
             Return True if fits
         """
+        tried_cnt = 0
         for from_row, from_col in self.board.get_next_empty_cell():
-            for shape_id, shape in enumerate(piece):
+            for shape_id, shape in enumerate(piece.shape_list):
                 planned_placement = Placement(self.board.board_history, piece, shape_id, from_row, from_col)
                 if self.tried_already(planned_placement):
-                    return 'tried', None
+                    tried_cnt += 1
+                    continue
                 if self.board.fit_shape(shape, piece.size, from_row, from_col):
                     return 'ok', planned_placement
-        return 'fail', None
+        if tried_cnt == len(piece.shape_list):
+            return 'tried', None
+        else:
+            return 'fail', None
 
     def tried_already(self, new_attempt: Placement):
         for attempt in self.attempts_log:

@@ -10,17 +10,6 @@ class Piece:
     def __self__(self):
         return self.shape_list
 
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if self.counter < len(self.shape_list):
-            result = self.shape_list[self.counter]
-            self.counter += 1
-            return result
-        self.counter = 0
-        raise StopIteration
-
     def __str__(self):
         text = ''
         for shape in self.shape_list:
