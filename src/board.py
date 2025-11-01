@@ -41,7 +41,6 @@ class Board:
             new += self.board[:from_row]
         try:
             for row, piece_row in enumerate(piece):
-                # if piece is smaller than board, 2x2 piece in 1/1 place in 4x4 board, last two rows will be omitted
                 new_board_row_id = from_row + row
                 if new_board_row_id > len(self.board) - 1:
                     raise StopIteration
@@ -51,7 +50,10 @@ class Board:
                     continue
                 if sum(piece_row) == 0:
                     new.append(self.board[new_board_row_id])
+                    if sum(map(sum, zip(*piece[row:]))) == 0 and len(new) == len(self.board):
+                        break
                     continue
+                    # continues when every row is already there
                 board_row = self.board[new_board_row_id]
                 new.append([])
                 new_board_col_from = min(len(self.board[new_board_row_id]) - len(piece_row), from_col)
@@ -65,14 +67,14 @@ class Board:
                     new[new_board_row_id] += [self.addval(combined)]
                     if len(new[new_board_row_id]) > len(self.board[new_board_row_id]):
                         raise StopIteration
-            else:
-                if (rows_missing := len(self.board) - len(new)) > 0:
-                    new += (self.board[-rows_missing:])
-                self.board_history.append(self.board[:])
-                self.board = new[:]
-                self.board_size += size
-                self.placed_piece_cnt += 1
-                return True
+            # else:
+            if (rows_missing := len(self.board) - len(new)) > 0:
+                new += (self.board[-rows_missing:])
+            self.board_history.append(self.board[:])
+            self.board = new[:]
+            self.board_size += size
+            self.placed_piece_cnt += 1
+            return True
         except StopIteration:
             pass
 
