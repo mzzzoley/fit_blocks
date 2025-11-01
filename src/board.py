@@ -60,7 +60,7 @@ class Board:
                 for col, combined in enumerate(itertools.zip_longest(board_row[new_board_col_from:],
                                                                      piece_row[:],
                                                                      fillvalue=0)):
-                    if combined.count(0) < 1:
+                    if combined.count(0) == 0:
                         raise StopIteration
                     new[new_board_row_id] += [self.addval(combined)]
                     if len(new[new_board_row_id]) > len(self.board[new_board_row_id]):
@@ -68,10 +68,10 @@ class Board:
             else:
                 if (rows_missing := len(self.board) - len(new)) > 0:
                     new += (self.board[-rows_missing:])
+                self.board_history.append(self.board[:])
                 self.board = new[:]
                 self.board_size += size
                 self.placed_piece_cnt += 1
-                self.board_history.append(self.board)
                 return True
         except StopIteration:
             pass
