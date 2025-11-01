@@ -18,6 +18,7 @@ class Piece:
             result = self.shape_list[self.counter]
             self.counter += 1
             return result
+        self.counter = 0
         raise StopIteration
 
     def __str__(self):
