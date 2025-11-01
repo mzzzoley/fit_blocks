@@ -29,9 +29,17 @@ class FitBlocks:
         # self.pieces = [Piece(three_corner),
         #                Piece(five_gun),
         #                Piece(three_corner)]
-        self.pieces = [Piece(three_l),
-                       Piece(four_block),
-                       Piece(three_snake)]
+        # self.pieces = [Piece(three_l),
+        #                Piece(four_block),
+        #                Piece(three_snake)]
+        self.pieces = [Piece(five_gun),
+                       Piece(five_l),
+                       Piece(five_z),
+                       Piece(five_bag),
+                       Piece(six_lego),
+                       Piece(five_corner),
+                       Piece(five_factory),
+                       Piece(five_lightning)]
         self.piece_count = len(self.pieces)
         self.placed_pieces = []
         self.attempts_log = []

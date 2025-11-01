@@ -6,9 +6,16 @@ from piece import Piece
 class Board:
 
     def __init__(self):
-        self.board = [[0,0,0,0],
-                      [0,0,1,0],
-                      [0,0,0,0]]
+        # self.board = [[0,0,0,0],
+        #               [0,0,1,0],
+        #               [0,0,0,0]]
+        self.board = [[0,0,0,0,0,0,1],
+                      [0,0,0,0,1,0,1],
+                      [1,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0],
+                      [0,0,0,0,0,0,0],
+                      [0,0,0,1,1,1,1]]
         self.board_size = self.get_board_size()
         self.placed_piece_cnt = 0
         self.board_history = []
