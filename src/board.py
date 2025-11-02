@@ -13,7 +13,7 @@ class Board:
 
     def __str__(self):
         text = ''
-        text += '\n'.join(str(r) for r in self.board) + '\n'
+        text += '\n'.join(str(r) for r in self.board) + 2 * '\n'
         return text[:-1] if text else ''
 
     def create_board(self):
@@ -36,6 +36,7 @@ class Board:
 
     def fit_shape(self, piece, size: int, from_row: int, from_col: int):
         new = []
+        starter_zeroes_in_piece = 0
         if 0 < from_row:
             new += self.board[:from_row]
         try:
@@ -54,7 +55,14 @@ class Board:
                     continue
                 board_row = self.board[new_board_row_id]
                 new.append([])
-                new_board_col_from = min(len(self.board[new_board_row_id]) - len(piece_row), from_col)
+                if row == 0:
+                    for cell in piece_row:
+                        if cell == 0:
+                            starter_zeroes_in_piece += 1
+                        else:
+                            break
+                # print(starter_zeroes_in_piece)
+                new_board_col_from = min(max(len(self.board[new_board_row_id]) - len(piece_row)-starter_zeroes_in_piece,0), max(from_col-starter_zeroes_in_piece, 0))
                 if from_col:
                     new[new_board_row_id] += board_row[:new_board_col_from]
                 for col, combined in enumerate(itertools.zip_longest(board_row[new_board_col_from:],
@@ -69,6 +77,7 @@ class Board:
             if (rows_missing := len(self.board) - len(new)) > 0:
                 new += (self.board[-rows_missing:])
             self.board_history.append(self.board[:])
+            self.board = new[:]
             self.board = new[:]
             self.board_size += size
             self.placed_piece_cnt += 1

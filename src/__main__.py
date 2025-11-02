@@ -24,6 +24,8 @@ class FitBlocks:
                        Piece(five_corner),
                        Piece(five_factory),
                        Piece(five_lightning)]
+        # self.pieces = [Piece(five_corner),
+        #                Piece(six_lego)]
         self.piece_count = len(self.pieces)
         self.placed_pieces = []
         self.attempts_log = []
@@ -52,6 +54,7 @@ class FitBlocks:
             else:
                 self.pieces.insert(0, piece)
                 repeated += 1
+            print(self.board)
 
         if len(self.placed_pieces) != self.piece_count:
             print("FAIL")
@@ -90,8 +93,8 @@ class FitBlocks:
             self.board.pick_up_last_piece()
 
 if __name__ == '__main__':
-    month = 1
-    day = 1
+    month = 11
+    day = 2
     print(month, '.', day)
     app = FitBlocks(month, day)
     app.solve()
