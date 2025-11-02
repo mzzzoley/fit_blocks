@@ -27,16 +27,19 @@ class FitBlocks:
         self.piece_count = len(self.pieces)
         self.placed_pieces = []
         self.attempts_log = []
+        self.tried_pieces_history = []
 
     def solve(self):
         repeated = 0
         while self.pieces:
+            print(self.board, '\n')
             if repeated > len(self.pieces) and self.pieces:
                 if not len(self.placed_pieces):
                     break
                 self.take_step_back()
                 repeated = 0
             piece = self.pieces.pop()
+            self.tried_pieces_history.append(piece)
             result, placement = self.place_piece(piece)
             if result == 'ok':
                 self.placed_pieces.append(piece)
@@ -47,10 +50,12 @@ class FitBlocks:
                 repeated += 1
 
         if len(self.placed_pieces) != self.piece_count:
-            print("FAIL", "Pieces don't fit", sep='\n')
+            print("FAIL")
+            return 0
         else:
             print("SUCCESS")
             print(self.board, '\n')
+            return 1
 
     def place_piece(self, piece: Piece):
         """
@@ -79,7 +84,20 @@ class FitBlocks:
             self.board.pick_up_last_piece()
 
 if __name__ == '__main__':
-    month = 7
-    day = 11
+    month = 6
+    day = 20
     app = FitBlocks(month, day)
     app.solve()
+
+    def stats():
+        cnt = 0
+        success = 0
+        for m in range(1,13):
+            for d in range(1,32):
+                cnt += 1
+                print(m,d, sep='.')
+                app = FitBlocks(m, d)
+                success += app.solve()
+        print(success, ' found out of ', cnt)
+
+    # stats()
