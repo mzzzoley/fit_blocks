@@ -39,7 +39,6 @@ class Piece:
                 latest = rotated_new
             else:
                 break
-
         mirrored_shape_list = []
         for shape in self.shape_list:
             mirrored_new = self.__mirror(shape)

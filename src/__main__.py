@@ -14,24 +14,8 @@ class Placement:
 
 class FitBlocks:
 
-    def __init__(self):
-        self.board = Board()
-        # self.pieces = [Piece(six_lego),
-        #                Piece(five_bag)]
-        # self.pieces = [Piece(five_bag),
-        #                Piece(six_lego)]
-        # self.pieces = [Piece(five_gun),
-        #                Piece(three_corner),
-        #                Piece(three_corner)]
-        # self.pieces = [Piece(three_corner),
-        #                Piece(three_corner),
-        #                Piece(five_gun)]
-        # self.pieces = [Piece(three_corner),
-        #                Piece(five_gun),
-        #                Piece(three_corner)]
-        # self.pieces = [Piece(three_l),
-        #                Piece(four_block),
-        #                Piece(three_snake)]
+    def __init__(self, month: int, day: int):
+        self.board = Board(month, day)
         self.pieces = [Piece(five_gun),
                        Piece(five_l),
                        Piece(five_z),
@@ -58,10 +42,6 @@ class FitBlocks:
                 self.placed_pieces.append(piece)
                 repeated = 0
                 self.attempts_log.append(placement)
-                print(self.board, '\n')
-            elif placement == 'tried':
-                self.take_step_back()
-                repeated = 0
             else:
                 self.pieces.insert(0, piece)
                 repeated += 1
@@ -77,17 +57,13 @@ class FitBlocks:
             Fit piece on board
             Return True if fits
         """
-        tried_cnt = 0
-        for from_row, from_col in self.board.get_next_empty_cell():
-            for shape_id, shape in enumerate(piece.shape_list):
-                planned_placement = Placement(self.board.board_history, piece, shape_id, from_row, from_col)
-                if self.tried_already(planned_placement):
-                    tried_cnt += 1
-                    continue
-                if self.board.fit_shape(shape, piece.size, from_row, from_col):
-                    return 'ok', planned_placement
-        if tried_cnt == len(piece.shape_list):
-            return 'tried', None
+        from_row, from_col = self.board.get_next_empty_cell()
+        for shape_id, shape in enumerate(piece.shape_list):
+            planned_placement = Placement(self.board.board_history[:], piece, shape_id, from_row, from_col)
+            if self.tried_already(planned_placement):
+                continue
+            if self.board.fit_shape(shape, piece.size, from_row, from_col):
+                return 'ok', planned_placement
         else:
             return 'fail', None
 
@@ -103,5 +79,7 @@ class FitBlocks:
             self.board.pick_up_last_piece()
 
 if __name__ == '__main__':
-    app = FitBlocks()
+    month = 7
+    day = 11
+    app = FitBlocks(month, day)
     app.solve()
