@@ -31,8 +31,12 @@ class FitBlocks:
 
     def solve(self):
         repeated = 0
+        global cnt
+        cnt = 0
         while self.pieces:
-            print(self.board, '\n')
+            cnt += 1
+            if cnt >= 2400:
+                pass
             if repeated > len(self.pieces) and self.pieces:
                 if not len(self.placed_pieces):
                     break
@@ -62,6 +66,8 @@ class FitBlocks:
             Fit piece on board
             Return True if fits
         """
+        if cnt >= 2400:
+            pass
         from_row, from_col = self.board.get_next_empty_cell()
         for shape_id, shape in enumerate(piece.shape_list):
             planned_placement = Placement(self.board.board_history[:], piece, shape_id, from_row, from_col)
@@ -84,8 +90,9 @@ class FitBlocks:
             self.board.pick_up_last_piece()
 
 if __name__ == '__main__':
-    month = 6
-    day = 20
+    month = 1
+    day = 1
+    print(month, '.', day)
     app = FitBlocks(month, day)
     app.solve()
 
