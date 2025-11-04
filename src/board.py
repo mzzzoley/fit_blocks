@@ -3,17 +3,17 @@ import itertools
 
 class Board:
 
-    def __init__(self, month: int, day: int):
+    def __init__(self, month: int = None, day: int = None, board: list[list] = None):
         self.month = month
         self.day = day
-        self.board = self.create_board()
+        self.board = board if board else self.create_board()
         self.board_size = self.get_board_size()
         self.placed_piece_cnt = 0
         self.board_history = []
 
     def __str__(self):
         text = ''
-        text += '\n'.join(str(r) for r in self.board) + 2 * '\n'
+        text += '\n'.join(str(r) for r in self.board) + '\n'
         return text[:-1] if text else ''
 
     def create_board(self):

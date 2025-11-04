@@ -1,7 +1,9 @@
+from dataclasses import dataclass
+
+from board import Board
 from constants import *
 from piece import Piece
-from board import Board
-from dataclasses import dataclass
+
 
 @dataclass
 class Placement:
@@ -28,14 +30,9 @@ class FitBlocks:
         self.placed_pieces = []
         self.attempts_log = []
 
-    def solve(self):
+    def solve(self, print_board: bool = True):
         repeated = 0
-        global cnt
-        cnt = 0
         while self.pieces:
-            cnt += 1
-            if cnt >= 2400:
-                pass
             if repeated > len(self.pieces) and self.pieces:
                 if not len(self.placed_pieces):
                     break
@@ -46,7 +43,7 @@ class FitBlocks:
             if result == 'ok':
                 self.placed_pieces.append(piece)
                 repeated = 0
-                self.attempts_log.append(placement)
+                self.attempts_log.append([len(self.placed_pieces), placement])
             else:
                 self.pieces.insert(0, piece)
                 repeated += 1
@@ -55,8 +52,9 @@ class FitBlocks:
             print("FAIL")
             return 0
         else:
-            print("SUCCESS")
-            print(self.board, '\n')
+            if print_board:
+                print("SUCCESS")
+                print(self.board, '\n')
             return 1
 
     def place_piece(self, piece: Piece):
@@ -76,7 +74,7 @@ class FitBlocks:
 
     def tried_already(self, new_attempt: Placement):
         for attempt in self.attempts_log:
-            if attempt == new_attempt:
+            if attempt[1] == new_attempt:
                 return True
 
     def take_step_back(self):
@@ -84,6 +82,8 @@ class FitBlocks:
             last_tried = self.placed_pieces.pop()
             self.pieces.insert(0, last_tried)
             self.board.pick_up_last_piece()
+            while self.attempts_log[-1][0] > len(self.placed_pieces) + 1:
+                self.attempts_log.pop()
 
 if __name__ == '__main__':
     month = 11
@@ -91,16 +91,3 @@ if __name__ == '__main__':
     print(month, '.', day)
     app = FitBlocks(month, day)
     app.solve()
-
-    def stats():
-        cnt = 0
-        success = 0
-        for m in range(1,13):
-            for d in range(1,32):
-                cnt += 1
-                print(m,d, sep='.')
-                app = FitBlocks(m, d)
-                success += app.solve()
-        print(success, ' found out of ', cnt)
-
-    # stats()

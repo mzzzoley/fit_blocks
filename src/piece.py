@@ -5,7 +5,6 @@ class Piece:
         self.size = sum(map(sum, zip(*shape)))
         self.shape_list = [self.base]
         self.__create_possibilities()
-        self.counter = 0
 
     def __self__(self):
         return self.shape_list
