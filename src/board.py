@@ -61,7 +61,6 @@ class Board:
                             starter_zeroes_in_piece += 1
                         else:
                             break
-                # print(starter_zeroes_in_piece)
                 new_board_col_from = min(max(len(self.board[new_board_row_id]) - len(piece_row)-starter_zeroes_in_piece,0), max(from_col-starter_zeroes_in_piece, 0))
                 if from_col:
                     new[new_board_row_id] += board_row[:new_board_col_from]
@@ -77,7 +76,6 @@ class Board:
             if (rows_missing := len(self.board) - len(new)) > 0:
                 new += (self.board[-rows_missing:])
             self.board_history.append(self.board[:])
-            self.board = new[:]
             self.board = new[:]
             self.board_size += size
             self.placed_piece_cnt += 1

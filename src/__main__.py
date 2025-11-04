@@ -24,12 +24,9 @@ class FitBlocks:
                        Piece(five_corner),
                        Piece(five_factory),
                        Piece(five_lightning)]
-        # self.pieces = [Piece(five_corner),
-        #                Piece(six_lego)]
         self.piece_count = len(self.pieces)
         self.placed_pieces = []
         self.attempts_log = []
-        self.tried_pieces_history = []
 
     def solve(self):
         repeated = 0
@@ -45,7 +42,6 @@ class FitBlocks:
                 self.take_step_back()
                 repeated = 0
             piece = self.pieces.pop()
-            self.tried_pieces_history.append(piece)
             result, placement = self.place_piece(piece)
             if result == 'ok':
                 self.placed_pieces.append(piece)
@@ -54,30 +50,26 @@ class FitBlocks:
             else:
                 self.pieces.insert(0, piece)
                 repeated += 1
-            print(self.board)
 
         if len(self.placed_pieces) != self.piece_count:
             print("FAIL")
-            return 0
         else:
             print("SUCCESS")
             print(self.board, '\n')
-            return 1
 
     def place_piece(self, piece: Piece):
         """
             Fit piece on board
             Return True if fits
         """
-        if cnt >= 2400:
-            pass
         from_row, from_col = self.board.get_next_empty_cell()
         for shape_id, shape in enumerate(piece.shape_list):
-            planned_placement = Placement(self.board.board_history[:], piece, shape_id, from_row, from_col)
-            if self.tried_already(planned_placement):
-                continue
             if self.board.fit_shape(shape, piece.size, from_row, from_col):
-                return 'ok', planned_placement
+                placement = Placement(self.board.board_history[:], piece, shape_id, from_row, from_col)
+                if self.tried_already(placement):
+                    self.board.pick_up_last_piece()
+                    continue
+                return 'ok', placement
         else:
             return 'fail', None
 
@@ -94,7 +86,7 @@ class FitBlocks:
 
 if __name__ == '__main__':
     month = 11
-    day = 2
+    day = 1
     print(month, '.', day)
     app = FitBlocks(month, day)
     app.solve()
