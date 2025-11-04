@@ -53,9 +53,11 @@ class FitBlocks:
 
         if len(self.placed_pieces) != self.piece_count:
             print("FAIL")
+            return 0
         else:
             print("SUCCESS")
             print(self.board, '\n')
+            return 1
 
     def place_piece(self, piece: Piece):
         """
@@ -64,12 +66,11 @@ class FitBlocks:
         """
         from_row, from_col = self.board.get_next_empty_cell()
         for shape_id, shape in enumerate(piece.shape_list):
+            planned_placement = Placement(self.board.board[:], piece, shape_id, from_row, from_col)
+            if self.tried_already(planned_placement):
+                continue
             if self.board.fit_shape(shape, piece.size, from_row, from_col):
-                placement = Placement(self.board.board_history[:], piece, shape_id, from_row, from_col)
-                if self.tried_already(placement):
-                    self.board.pick_up_last_piece()
-                    continue
-                return 'ok', placement
+                return 'ok', planned_placement
         else:
             return 'fail', None
 
