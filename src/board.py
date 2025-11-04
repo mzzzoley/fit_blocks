@@ -1,20 +1,32 @@
 import itertools
-
+import calendar
 
 class Board:
 
     def __init__(self, month: int = None, day: int = None, board: list[list] = None):
-        self.month = month
+        self.month = month if board is None else None
         self.day = day
-        self.board = board if board else self.create_board()
+        self.board = board if board is not None else self.create_board()
         self.board_size = self.get_board_size()
         self.placed_piece_cnt = 0
         self.board_history = []
 
     def __str__(self):
-        text = ''
-        text += '\n'.join(str(r) for r in self.board) + '\n'
-        return text[:-1] if text else ''
+        if self.month:
+            if self.month < 7:
+                self.board[0][self.month - 1] = calendar.month_name[self.month][:3]
+            else:
+                self.board[1][self.month % 7] = calendar.month_name[self.month][:3]
+            self.board[self.day // 7 + 2][self.day % 7 - 1] = 'Day' + str(self.day)
+
+        text = ' | ' + "-" * (len(self.board[0]) * 8 - 3) + ' |'
+        text += '\n'
+        for row in self.board:
+            text += " | " + " | ".join(f"{str('X' if item == 1 else item).center(5)}" for item in row)  + ' |'
+            text += '\n'
+            text += " | " + "-" * (len(row) * 8 - 3) + " | "
+            text += '\n'
+        return text
 
     def create_board(self):
         board = [[0, 0, 0, 0, 0, 0, 1],

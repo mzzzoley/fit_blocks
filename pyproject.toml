@@ -1,14 +1,13 @@
 [tool.poetry]
 name = "fit-blocks"
-version = "0.1.0"
+version = "1.0.0"
 description = ""
 authors = ["Zzzoley <mzzzoley@gmail.com>"]
 license = "N/A"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
-numpy = "^2.3.4"
+python = "^3.11"
 
 
 [build-system]
