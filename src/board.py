@@ -61,7 +61,8 @@ class Board:
                             starter_zeroes_in_piece += 1
                         else:
                             break
-                new_board_col_from = min(max(len(self.board[new_board_row_id]) - len(piece_row)-starter_zeroes_in_piece,0), max(from_col-starter_zeroes_in_piece, 0))
+                new_board_col_from = min(max(len(self.board[new_board_row_id]) - len(piece_row),0),
+                                         max(from_col-starter_zeroes_in_piece, 0))
                 if from_col:
                     new[new_board_row_id] += board_row[:new_board_col_from]
                 for col, combined in enumerate(itertools.zip_longest(board_row[new_board_col_from:],
