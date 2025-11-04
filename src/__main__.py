@@ -86,8 +86,9 @@ class FitBlocks:
                 self.attempts_log.pop()
 
 if __name__ == '__main__':
-    month = 11
-    day = 1
+    month = 10
+    day = 6
     print(month, '.', day)
     app = FitBlocks(month, day)
     app.solve()
+    # issue 04.06, 05.06, 10.06

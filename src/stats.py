@@ -10,7 +10,10 @@ def stats():
             cnt += 1
             print(m, d, sep='.')
             app = FitBlocks(m, d)
-            success += app.solve(print_board=False)
+            if app.solve(print_board=False):
+                success += 1
+            else:
+                print(f'{m}.{d}', ' not found')
     print(success, ' found out of ', cnt)
 
 if __name__ == '__main__':
