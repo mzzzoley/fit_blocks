@@ -18,5 +18,5 @@ def stats(print_boards: bool=False):
     print(success, ' found out of ', cnt)
 
 if __name__ == '__main__':
-    stats(True)
+    # stats(True)
     stats()
