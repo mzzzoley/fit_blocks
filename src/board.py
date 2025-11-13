@@ -28,6 +28,9 @@ class Board:
             text += '\n'
         return text
 
+    def __eq__(self, other):
+        return self.board == other.board
+
     def create_board(self):
         board = [[0, 0, 0, 0, 0, 0, 1],
                  [0, 0, 0, 0, 0, 0, 1],

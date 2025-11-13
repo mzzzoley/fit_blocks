@@ -1,3 +1,5 @@
+import copy
+
 from src.board import Board
 from src.constants import *
 from src.piece import Piece
@@ -20,8 +22,9 @@ class FitBlocks:
         self.placed_pieces = []
         self.attempts_log = []
 
-    def solve(self, print_board: bool = True):
+    def solve(self, print_board: bool = True, find_all: bool = False):
         repeated = 0
+        solutions = []
         while self.pieces:
             if repeated > len(self.pieces) and self.pieces:
                 if not len(self.placed_pieces):
@@ -38,14 +41,22 @@ class FitBlocks:
                 self.pieces.insert(0, piece)
                 repeated += 1
 
-        if len(self.placed_pieces) != self.piece_count:
-            print("FAIL")
-            return 0
-        else:
+            if find_all and not self.pieces:
+                for solution in solutions:
+                    if self.board == solution:
+                        break
+                solutions.append(copy.deepcopy(self.board))
+                self.take_step_back()
+
+        if find_all:
             if print_board:
-                print("SUCCESS")
-                print(self.board, '\n')
-            return 1
+                print(len(solutions), ' solution(s) found')
+                for solution in solutions:
+                    print(solution, '\n')
+            else:
+                return len(solutions)
+        else:
+            self.output_if_find_one(print_board)
 
     def place_piece(self, piece: Piece):
         from_row, from_col = self.board.get_next_empty_cell()
@@ -70,3 +81,13 @@ class FitBlocks:
             self.board.pick_up_last_piece()
             while self.attempts_log[-1][0] > len(self.placed_pieces) + 1:
                 self.attempts_log.pop()
+
+    def output_if_find_one(self, print_board: bool):
+        if len(self.placed_pieces) != self.piece_count:
+            print("FAIL")
+            return 0
+        else:
+            if print_board:
+                print("SUCCESS")
+                print(self.board, '\n')
+            return 1
