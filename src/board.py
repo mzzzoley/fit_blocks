@@ -17,7 +17,7 @@ class Board:
                 self.board[0][self.month - 1] = calendar.month_name[self.month][:3]
             else:
                 self.board[1][self.month % 7] = calendar.month_name[self.month][:3]
-            self.board[self.day // 7 + 2][self.day % 7 - 1] = 'Day' + str(self.day)
+            self.board[(self.day - 1) // 7 + 2][self.day % 7 - 1] = 'Day' + str(self.day)
 
         text = ' | ' + "-" * (len(self.board[0]) * 8 - 3) + ' |'
         text += '\n'
@@ -43,7 +43,7 @@ class Board:
             board[0][self.month - 1] = 1
         else:
             board[1][self.month % 7] = 1
-        board[self.day // 7 + 2][self.day % 7 - 1] = 1
+        board[(self.day - 1) // 7 + 2][self.day % 7 - 1] = 1
         return board
 
     def get_board_size(self):
